@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { RECIPE_CATEGORIES } from "../data/categories";
+import ShoppingList from "./ShoppingList";
 
 const mealLabels: Record<string, string> = { desayuno: "Desayuno", almuerzo: "Almuerzo", merienda: "Merienda", cena: "Cena" };
 const mealIcons: Record<string, string> = { desayuno: "☀️", almuerzo: "🌤️", merienda: "🍵", cena: "🌙" };
 
-export default function MealPlanApp({ days, recipes, shopping, tips }: any) {
+export default function MealPlanApp({ days, recipes, shoppingItems, dbReady, tips }: any) {
     const [selectedDay, setSelectedDay] = useState(0);
     const [view, setView] = useState("plan");
     const [recipeFilter, setRecipeFilter] = useState("all");
@@ -229,35 +230,7 @@ export default function MealPlanApp({ days, recipes, shopping, tips }: any) {
 
                 {/* ===== COMPRAS VIEW ===== */}
                 {view === "compras" && (
-                    <>
-                        <h2 className="font-display text-2xl font-extrabold mt-2 mb-1 pl-1">
-                            🛒 Lista de compras
-                        </h2>
-                        <p className="text-[13px] text-muted mb-4 pl-1">
-                            Todo lo que necesitás para la semana
-                        </p>
-
-                        <div className="flex flex-col gap-3">
-                            {Object.entries(shopping).map(([cat, items]: [string, any]) => {
-                                const catNames: Record<string, string> = { proteinas: "🥩 Proteínas", lacteos: "🧀 Lácteos", verduras: "🥬 Verduras y frutas", secos: "🌾 Secos y harinas", condimentos: "🫙 Condimentos" };
-                                return (
-                                    <div key={cat} className="bg-card border border-line rounded-2xl p-4 shadow-sm">
-                                        <div className="font-extrabold text-sm mb-3 text-accent bg-accent/10 inline-block px-2.5 py-1 rounded-lg">
-                                            {catNames[cat]}
-                                        </div>
-                                        <div className="flex flex-col gap-0.5">
-                                            {items.map((item: string, i: number) => (
-                                                <div key={i} className={`flex items-start gap-3 py-2 lg:items-center text-[13px] text-fg font-medium ${i < items.length - 1 ? 'border-b border-line' : ''}`}>
-                                                    <span className="w-[18px] h-[18px] rounded-md border-2 border-line shrink-0 mt-0.5 lg:mt-0 transition-colors hover:border-accent hover:bg-accent/10 cursor-pointer" />
-                                                    <span className="leading-snug">{item}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </>
+                    <ShoppingList initialItems={shoppingItems} dbReady={dbReady} />
                 )}
 
                 {/* ===== TIPS VIEW ===== */}
