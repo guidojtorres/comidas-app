@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export const SHOPPING = {
     proteinas: ["Pechuga de pollo 2kg", "Carne picada 1kg", "Carne para estofado 1kg (roast beef o paleta)", "Huevos x30", "Milanesas de carne (o hacerlas)", "Chorizo colorado", "Jamón cocido 400g"],
     lacteos: ["Leche 2L", "Yogur natural", "Queso cremoso 500g", "Queso rallado", "Muzarella 500g", "Dulce de leche", "Manteca"],

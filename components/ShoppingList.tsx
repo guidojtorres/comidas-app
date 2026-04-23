@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition, useEffect } from "react";
-import { toggleItem, addItem, deleteItem, clearAllItems, initDb } from "@/app/actions/shopping";
+import { toggleItem, addItem, deleteItem, uncheckAllItems, initDb } from "@/app/actions/shopping";
 
 interface ShoppingItem {
     id: number;
@@ -83,7 +83,7 @@ export default function ShoppingList({ initialItems, dbReady }: { initialItems: 
     const handleClearAll = async () => {
         setItems(prev => prev.map(i => ({ ...i, is_completed: false })));
         startTransition(() => {
-            clearAllItems();
+            uncheckAllItems();
         });
     }
 

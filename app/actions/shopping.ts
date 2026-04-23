@@ -83,7 +83,7 @@ export async function deleteItem(id: number) {
   }
 }
 
-export async function clearAllItems() {
+export async function uncheckAllItems() {
   try {
     await sql`UPDATE shopping_items SET is_completed = false;`;
     revalidatePath("/", "page");
