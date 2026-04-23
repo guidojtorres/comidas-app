@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 250 248 245;
+  --fg: 45 42 38;
+  --card: 255 255 255;
+  --accent: 224 122 58;
+  --accent2: 58 138 110;
+  --accent3: 196 85 58;
+  --muted: 138 133 128;
+  --line: 235 230 224;
+  --soft: 243 239 233;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: 26 24 22;
+    --fg: 232 228 223;
+    --card: 37 34 32;
+    --accent: 232 147 79;
+    --accent2: 79 170 136;
+    --accent3: 212 102 74;
+    --muted: 138 133 128;
+    --line: 58 54 51;
+    --soft: 42 39 36;
+  }
+}
+
+html,
+body {
+  min-height: 100vh;
+}
+
+body {
+  background-color: rgb(var(--bg));
+  color: rgb(var(--fg));
+}
