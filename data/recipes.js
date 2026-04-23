@@ -90,7 +90,7 @@ export const RECIPES = [
     category: "cena",
     time: "45 min",
     portions: "6-8 porciones (x2 tartas)",
-    ingredients: ["4 tapas de tarta (compradas)", "300g jamón cocido", "400g queso mozzarella", "4 huevos", "Sal, pimienta, nuez moscada"],
+    ingredients: ["4 tapas de tarta", "300g jamón cocido", "400g queso mozzarella", "4 huevos", "Sal, pimienta, nuez moscada"],
     steps: [
       "Precalentá el horno a 180°C.",
       "Forrá dos tarteras con una tapa de tarta cada una, pinchá la base con tenedor.",

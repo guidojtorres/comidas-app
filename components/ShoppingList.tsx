@@ -15,6 +15,7 @@ export default function ShoppingList({ initialItems, dbReady }: { initialItems: 
     const [isPending, startTransition] = useTransition();
     const [newItemName, setNewItemName] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("proteinas");
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         setItems(initialItems);
@@ -87,8 +88,14 @@ export default function ShoppingList({ initialItems, dbReady }: { initialItems: 
         });
     }
 
+    // Search filtering
+    const searchLower = searchQuery.toLowerCase().trim();
+    const filteredItems = searchLower
+        ? items.filter(item => item.name.toLowerCase().includes(searchLower))
+        : items;
+
     // Grouping
-    const groupedItems = items.reduce((acc, item) => {
+    const groupedItems = filteredItems.reduce((acc, item) => {
         if (!acc[item.category]) acc[item.category] = [];
         acc[item.category].push(item);
         return acc;
@@ -109,6 +116,31 @@ export default function ShoppingList({ initialItems, dbReady }: { initialItems: 
                     Desmarcar todo
                 </button>
             </div>
+
+            {/* Search bar */}
+            <div className="relative mt-3 mb-1">
+                <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Buscar en la lista..."
+                    className="w-full bg-card border border-line rounded-xl py-2.5 pl-10 pr-10 text-sm text-fg placeholder-muted outline-none focus:border-accent/50 focus:shadow-[0_0_0_3px_rgba(224,122,58,0.1)] transition-all"
+                />
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted text-sm pointer-events-none">🔍</span>
+                {searchQuery && (
+                    <button
+                        onClick={() => setSearchQuery("")}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-fg text-sm transition-colors"
+                    >
+                        ✕
+                    </button>
+                )}
+            </div>
+            {searchQuery && (
+                <p className="text-[11px] text-muted pl-1 mb-1">
+                    {filteredItems.length} resultado{filteredItems.length !== 1 ? 's' : ''} para &quot;{searchQuery}&quot;
+                </p>
+            )}
 
             <form onSubmit={handleAdd} className="flex gap-2 p-3 my-4 bg-card border border-line rounded-2xl shadow-sm items-center">
                 <select 

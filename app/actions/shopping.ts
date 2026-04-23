@@ -91,3 +91,48 @@ export async function uncheckAllItems() {
     console.error("Error clearing items:", error);
   }
 }
+
+export async function reseedDb() {
+  try {
+    const { SHOPPING } = await import("@/data/shopping");
+
+    // Build a set of all items that SHOULD exist (from the source file)
+    const sourceItems: { name: string; category: string }[] = [];
+    for (const [category, items] of Object.entries(SHOPPING)) {
+      for (const itemName of items as string[]) {
+        sourceItems.push({ name: itemName, category });
+      }
+    }
+
+    // Get current items in DB
+    const { rows: existing } = await sql`SELECT id, name, category FROM shopping_items;`;
+
+    // Find items to ADD (in source but not in DB)
+    const existingKeys = new Set(existing.map((r: { name: string; category: string }) => `${r.category}::${r.name}`));
+    const toAdd = sourceItems.filter(s => !existingKeys.has(`${s.category}::${s.name}`));
+
+    // Find items to REMOVE (in DB but not in source)
+    const sourceKeys = new Set(sourceItems.map(s => `${s.category}::${s.name}`));
+    const toRemove = existing.filter((r: { name: string; category: string }) => !sourceKeys.has(`${r.category}::${r.name}`));
+
+    // Insert new items
+    for (const item of toAdd) {
+      await sql`
+        INSERT INTO shopping_items (name, category, is_completed)
+        VALUES (${item.name}, ${item.category}, false);
+      `;
+    }
+
+    // Remove old items
+    for (const item of toRemove) {
+      await sql`DELETE FROM shopping_items WHERE id = ${(item as { id: number }).id};`;
+    }
+
+    console.log(`Reseed complete: +${toAdd.length} added, -${toRemove.length} removed`);
+    revalidatePath("/", "page");
+    return { added: toAdd.length, removed: toRemove.length };
+  } catch (error) {
+    console.error("Error reseeding database:", error);
+    throw error;
+  }
+}
